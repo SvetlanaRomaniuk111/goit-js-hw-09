@@ -13,10 +13,12 @@ function createPromise(position, delay) {
   });
   return promise
     .then(value => {
-      console.log(value);
+      // console.log(value);
+      Notiflix.Notify.success(value);
     })
     .catch(err => {
-      console.log(err);
+      // console.log(err);
+      Notiflix.Notify.failure(err);
     });
 }
 
@@ -29,9 +31,13 @@ promiseForm.addEventListener('submit', event => {
     step: Number(event.currentTarget.elements.step.value),
     amount: Number(event.currentTarget.elements.amount.value),
   };
-  let delay = data.delay;
-  for (let i = 0; i < data.amount; i++) {
-    createPromise(i + 1, delay);
-    delay += data.step;
+  let { delay, step, amount } = data;
+  if (delay < 0 || step < 0 || amount <= 0) {
+    Notiflix.Notify.warning('You enter incorrect values');
+  } else {
+    for (let i = 0; i < amount; i++) {
+      createPromise(i + 1, delay);
+      delay += step;
+    }
   }
 });
